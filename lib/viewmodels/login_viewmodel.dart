@@ -1,42 +1,76 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/models/usuario.dart';
+import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginViewModel extends ChangeNotifier {
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
+  Usuario? _usuario;
 
-  Future<bool> signInWithGoogle() async {
+  Future<bool> signInWithGoogle(BuildContext context) async {
     try {
-      // Paso 1: Iniciar el flujo de inicio de sesión de Google
-      // Le pedimos al paquete google_sign_in que comience el proceso.
+
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-      // Si el usuario cancela el inicio de sesión, googleUser será null
       if (googleUser == null) {
         print('Inicio de sesión con Google cancelado por el usuario.');
-        return false; // Retornar null si el usuario canceló
+        return false;
       }
-      // Paso 2: Obtener los detalles de autenticación del usuario de Google
-      // Una vez que el usuario inicia sesión con Google, obtenemos sus credenciales.
+
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      // Paso 3: Crear una credencial de Firebase a partir de las credenciales de Google
-      // Usamos el ID token y el Access token de Google para crear una credencial que Firebase entiende.
       final OAuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      // Paso 4: Iniciar sesión en Firebase con la credencial de Google
-      // Ahora usamos la credencial de Firebase creada para autenticar al usuario en Firebase.
       final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      final user = userCredential.user;
 
-      // Si todo fue bien, userCredential contiene la información del usuario autenticado en Firebase.
+      if (user != null) {
+
+        final userRef = _dbRef.child("users").child(user.uid);
+
+        final DataSnapshot snapshot = await userRef.get();
+        if (!snapshot.exists) {
+
+          _usuario = Usuario(
+            uid: user.uid,
+            name: user.displayName ?? '',
+            email: user.email ?? '',
+            photoUrl: user.photoURL,
+            cuentas: [],
+          );
+          await userRef.set(_usuario!.toMap());
+        }else {
+          _usuario = Usuario.fromMap(snapshot.value as Map);
+        }
+        final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+        userViewModel.setUsuario(_usuario as Usuario);
+        return true;
+      }
       print('Inicio de sesión con Google exitoso: ${userCredential.user?.displayName}');
+      return false;
 
-      return true;
     } catch (e) {
       print('Error en login con Google: $e');
       return false;
     }
   }
+
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print('Cierre de sesión de Firebase exitoso.');
+      await GoogleSignIn().signOut();
+      print('Cierre de sesión de Google exitoso.');
+    } catch (e) {
+      print('Error al cerrar sesión: $e');
+      // throw e;
+    }
+  }
+
 }

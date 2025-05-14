@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/app/utils/colors/colors.dart';
+import 'package:gastos/views/home_view.dart';
+import 'package:gastos/views/perfil_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../../atoms/texts/body/sm_p.dart';
@@ -35,7 +37,10 @@ class _Footer extends State<Footer> {
     navigator(int i) {
       switch (i) {
         case 0:
-         // routes.dashboard(context: context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeView()),
+          );
           break;
         case 1:
       //    routes.search(context: context);
@@ -44,10 +49,10 @@ class _Footer extends State<Footer> {
         //  routes.mainExplore(context: context);
           break;
         case 3:
-        //  routes.cart(context: context);
-          break;
-        case 4:
-         // routes.profilePage(context: context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const PerfilView()),
+          );
           break;
       }
     }
@@ -65,7 +70,7 @@ class _Footer extends State<Footer> {
             SalomonBottomBarItem(
               icon: const Icon(Icons.home),
               title: SmP(
-                  title: 'Inicio',
+                  title: 'Home',
                   color: colorsUI.secondary500,
                   align: TextAlign.center,
                   fontWeight: FontWeight.bold),
@@ -74,31 +79,30 @@ class _Footer extends State<Footer> {
 
             /// Search
             SalomonBottomBarItem(
-              icon: const Icon(Icons.search),
+              icon: const Icon(Icons.flag_outlined),
               title: SmP(
-                  title: 'Buscar',
+                  title: 'Metas',
                   color: colorsUI.secondary500,
                   align: TextAlign.center,
                   fontWeight: FontWeight.bold),
               selectedColor: colorsUI.secondary500,
             ),
 
+            /// Search
+            SalomonBottomBarItem(
+              icon: Icon(PhosphorIcons.chatCircleDots()),
+              title: SmP(
+                  title: 'IA',
+                  color: colorsUI.secondary500,
+                  align: TextAlign.center,
+                  fontWeight: FontWeight.bold),
+              selectedColor: colorsUI.secondary500,
+            ),
             /// Create Perfume
             SalomonBottomBarItem(
-              icon: const Icon(Icons.add_circle_outline),
+              icon: const Icon(Icons.person_outline),
               title: SmP(
-                  title: 'Crear Perfume',
-                  color: colorsUI.secondary500,
-                  align: TextAlign.center,
-                  fontWeight: FontWeight.bold),
-              selectedColor: colorsUI.secondary500,
-            ),
-
-            /// Search
-            SalomonBottomBarItem(
-              icon: Icon(PhosphorIcons.shoppingCart()),
-              title: SmP(
-                  title: 'Compras',
+                  title: 'Perfil',
                   color: colorsUI.secondary500,
                   align: TextAlign.center,
                   fontWeight: FontWeight.bold),

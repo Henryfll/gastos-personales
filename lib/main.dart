@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gastos/viewmodels/login_viewmodel.dart';
+import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
-        // Aquí puedes agregar más ViewModels en el futuro
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
       ],
       child: ResponsiveApp(
         builder: (context) => ScreenUtilInit(
@@ -32,10 +33,11 @@ class MyApp extends StatelessWidget {
           builder: (context, child) => MaterialApp(
             debugShowCheckedModeBanner: false,
             home: const SplashView(),
-            // resto del código...
           ),
+          child: const SplashView(), // 🔥 Esto es clave
         ),
       ),
     );
   }
 }
+

@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/models/usuario.dart';
+import 'package:gastos/viewmodels/user_viewmodel.dart';
+import 'package:gastos/views/home_view.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 
 import '../app/constants/app_constants.dart';
@@ -12,14 +18,42 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const LoginView()),
-      );
-    });
+    _verificarUsuario();
+  }
+
+  void _verificarUsuario() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final currentUser = _auth.currentUser;
+
+    if (currentUser != null) {
+      final snapshot = await _dbRef.child('users/${currentUser.uid}').get();
+
+      if (snapshot.exists) {
+        final userMap = snapshot.value as Map;
+        final usuario = Usuario.fromMap(userMap);
+
+        // Guardar en UserViewModel
+        final userViewModel = Provider.of<UserViewModel>(context, listen: false);
+        userViewModel.setUsuario(usuario);
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomeView()),
+        );
+        return;
+      }
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const LoginView()),
+    );
   }
 
   @override

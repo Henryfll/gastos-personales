@@ -12,7 +12,7 @@ class LoginView extends StatelessWidget {
 
   void _handleLogin(BuildContext context) async {
     final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
-    final success = await loginViewModel.signInWithGoogle();
+    final success = await loginViewModel.signInWithGoogle(context);
 
     if (success) {
       Navigator.pushReplacement(

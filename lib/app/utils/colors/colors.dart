@@ -9,7 +9,7 @@ class ColorsUI {
   final Color primary500 = const Color(0xFF111111);
 
   final Color secondary100 = const Color(0xFFEDEBF8);
-  final Color secondary500 = const Color(0xFF4639EF);
+  final Color secondary500 = const Color(0xFFFFAA2C);
 }
 
 ColorsUI colorsUI = ColorsUI();
