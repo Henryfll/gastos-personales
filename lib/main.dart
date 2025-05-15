@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gastos/viewmodels/account_viewmodel.dart';
 import 'package:gastos/viewmodels/login_viewmodel.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => AccountViewModel()),
       ],
       child: ResponsiveApp(
         builder: (context) => ScreenUtilInit(

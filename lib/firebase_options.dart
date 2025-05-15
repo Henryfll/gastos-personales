@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:535119367767:android:93c97b56c64e4bbe741d12',
     messagingSenderId: '535119367767',
     projectId: 'gastos-e4e05',
+    databaseURL: 'https://gastos-e4e05-default-rtdb.firebaseio.com',
     storageBucket: 'gastos-e4e05.firebasestorage.app',
   );
 
@@ -62,7 +63,11 @@ class DefaultFirebaseOptions {
     appId: '1:535119367767:ios:56dec16186cc2bfc741d12',
     messagingSenderId: '535119367767',
     projectId: 'gastos-e4e05',
+    databaseURL: 'https://gastos-e4e05-default-rtdb.firebaseio.com',
     storageBucket: 'gastos-e4e05.firebasestorage.app',
+    androidClientId: '535119367767-krs3gipvsk8bgk9ecq6llsn71b50tg1u.apps.googleusercontent.com',
+    iosClientId: '535119367767-7veqjabo1vi91dchsid6cm1h1pifrp8g.apps.googleusercontent.com',
     iosBundleId: 'com.henryllamuca.gastos',
   );
+
 }

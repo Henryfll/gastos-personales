@@ -3,7 +3,7 @@ class Usuario {
   final String name;
   final String email;
   final String? photoUrl;
-  final List<dynamic> cuentas;
+  final List<String> cuentas;
 
   Usuario({
     required this.uid,
@@ -13,15 +13,6 @@ class Usuario {
     required this.cuentas,
   });
 
-  factory Usuario.fromMap(Map<dynamic, dynamic> map) {
-    return Usuario(
-      uid: map['uid'] ?? '',
-      name: map['name'] ?? '',
-      email: map['email'] ?? '',
-      photoUrl: map['photoUrl'],
-      cuentas: List<dynamic>.from(map['cuentas'] ?? []),
-    );
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -31,5 +22,16 @@ class Usuario {
       'photoUrl': photoUrl,
       'cuentas': cuentas,
     };
+  }
+
+
+  factory Usuario.fromMap(Map<String, dynamic> map) {
+    return Usuario(
+      uid: map['uid'] ?? '',
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
+      photoUrl: map['photoUrl'],
+      cuentas: List<String>.from(map['cuentas'] ?? []),
+    );
   }
 }

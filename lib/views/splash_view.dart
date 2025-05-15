@@ -1,14 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:gastos/models/usuario.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:gastos/views/home_view.dart';
+import 'package:gastos/views/login_view.dart';
 import 'package:provider/provider.dart';
-import 'dart:async';
-
-import '../app/constants/app_constants.dart';
-import 'login_view.dart';
+import 'package:gastos/app/constants/app_constants.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -18,9 +14,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
 
   @override
   void initState() {
@@ -30,20 +24,15 @@ class _SplashViewState extends State<SplashView> {
 
   void _verificarUsuario() async {
     await Future.delayed(const Duration(seconds: 3));
-
     final currentUser = _auth.currentUser;
 
     if (currentUser != null) {
-      final snapshot = await _dbRef.child('users/${currentUser.uid}').get();
+      final userViewModel = Provider.of<UserViewModel>(context, listen: false);
 
-      if (snapshot.exists) {
-        final userMap = snapshot.value as Map;
-        final usuario = Usuario.fromMap(userMap);
+      final usuarioCargado =
+      await userViewModel.loadUsuarioDesdeFirestore(currentUser.uid);
 
-        // Guardar en UserViewModel
-        final userViewModel = Provider.of<UserViewModel>(context, listen: false);
-        userViewModel.setUsuario(usuario);
-
+      if (usuarioCargado) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const HomeView()),
         );
