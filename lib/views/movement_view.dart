@@ -4,10 +4,12 @@ import 'package:gastos/models/account.dart';
 import 'package:gastos/viewmodels/category_view_model.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:gastos/widgets/molecules/buttons/add_movement_button.dart';
+import 'package:gastos/widgets/molecules/buttons/add_movement_button_options.dart';
 import 'package:gastos/widgets/molecules/buttons/add_new_button.dart';
 import 'package:gastos/widgets/templates/footer/footer.dart';
 import 'package:gastos/widgets/templates/grafics/movement_bar_chart.dart';
 import 'package:gastos/widgets/templates/grafics/movement_line_chart.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/account_viewmodel.dart';
 import '../../viewmodels/movement_viewmodel.dart';
@@ -15,6 +17,7 @@ import '../../models/movement.dart';
 
 class MovementsView extends StatelessWidget {
   const MovementsView({super.key});
+
 
   void _mostrarFormulario(BuildContext context, String tipo) {
     final _formKey = GlobalKey<FormState>();
@@ -166,6 +169,19 @@ class MovementsView extends StatelessWidget {
       ),
     );
   }
+  Future<void> _abrirCamara(BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+    if (pickedFile != null) {
+      // Aquí puedes manejar la imagen tomada, por ejemplo:
+      final imagePath = pickedFile.path;
+      print('Imagen capturada: $imagePath');
+      // Puedes guardar esta imagen o subirla a Firebase, etc.
+    } else {
+      print('No se tomó ninguna foto.');
+    }
+  }
 
 
   @override
@@ -207,15 +223,21 @@ class MovementsView extends StatelessWidget {
                 child: Row(
                   children: [
                     AddMovementButton(
-                        onPressed: () => _mostrarFormulario(context, AppConstants.INGRESO),
-                        texto: "Ingresos ${ingresos}",
-                        tipo: AppConstants.INGRESO,
+                      onPressed: () => _mostrarFormulario(context, AppConstants.INGRESO),
+                      texto: "Ingresos ${ingresos}",
+                      tipo: AppConstants.INGRESO,
                     ),
                     const SizedBox(width: 15),
-                    AddMovementButton(
-                      onPressed: () => _mostrarFormulario(context, AppConstants.EGRESO),
+                    AddMovementButtonOptions(
+                      onPressed: () {
+                        // accion
+                      },
+                      onRegister:  () => _mostrarFormulario(context, AppConstants.EGRESO),
                       texto: "Egresos ${egresos}",
                       tipo: AppConstants.EGRESO,
+                      onAutomatic: (){
+                        _abrirCamara(context);
+                      },
                     ),
                   ],
                 ),
