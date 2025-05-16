@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gastos/app/constants/app_constants.dart';
 import 'package:gastos/models/account.dart';
 import 'package:gastos/viewmodels/category_view_model.dart';
+import 'package:gastos/viewmodels/open_ai_view_model.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:gastos/widgets/molecules/buttons/add_movement_button.dart';
 import 'package:gastos/widgets/molecules/buttons/add_movement_button_options.dart';
@@ -174,10 +177,40 @@ class MovementsView extends StatelessWidget {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     if (pickedFile != null) {
-      // Aquí puedes manejar la imagen tomada, por ejemplo:
-      final imagePath = pickedFile.path;
-      print('Imagen capturada: $imagePath');
-      // Puedes guardar esta imagen o subirla a Firebase, etc.
+      final imageFile = File(pickedFile.path);
+
+      final openAiVM = Provider.of<OpenAiViewModel>(context, listen: false);
+      await openAiVM.procesarFactura(imageFile);
+
+      // Mostrar el resultado si quieres
+      final resultado = openAiVM.resultado;
+      if (context.mounted && resultado != null) {
+
+        final movementViewModel = Provider.of<MovementViewModel>(context, listen: false);
+        final usuario = Provider.of<UserViewModel>(context, listen: false).usuario;
+          await movementViewModel.crearMovimiento(
+            tipo: AppConstants.EGRESO,
+            categoria: AppConstants.FACTURA,
+            descripcion: AppConstants.FACTURA,
+            valor: double.parse(resultado),
+            fecha: DateTime.now(),
+            cuentaId: context.read<AccountViewModel>().accountSelected!.id,
+            usuarioCreacion: usuario!.uid,
+          );
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: const Text('Egreso Registrado!'),
+            content: Text(resultado),
+            actions: [
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      }
     } else {
       print('No se tomó ninguna foto.');
     }
@@ -227,18 +260,24 @@ class MovementsView extends StatelessWidget {
                       texto: "Ingresos ${ingresos}",
                       tipo: AppConstants.INGRESO,
                     ),
-                    const SizedBox(width: 15),
-                    AddMovementButtonOptions(
-                      onPressed: () {
-                        // accion
-                      },
-                      onRegister:  () => _mostrarFormulario(context, AppConstants.EGRESO),
-                      texto: "Egresos ${egresos}",
-                      tipo: AppConstants.EGRESO,
-                      onAutomatic: (){
-                        _abrirCamara(context);
-                      },
-                    ),
+                    const SizedBox(width: 5),
+                    Consumer<OpenAiViewModel>(builder: (context, openAiVM, child){
+                      if (openAiVM.isLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      return AddMovementButtonOptions(
+                        onPressed: () {
+                          // accion
+                        },
+                        onRegister:  () => _mostrarFormulario(context, AppConstants.EGRESO),
+                        texto: "Egresos ${(egresos ?? 0).toStringAsFixed(2)}",
+                        tipo: AppConstants.EGRESO,
+                        onAutomatic: (){
+                          _abrirCamara(context);
+                        },
+                      );
+
+                    }),
                   ],
                 ),
               );
