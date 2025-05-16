@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/models/account.dart';
 import 'package:gastos/viewmodels/account_viewmodel.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
@@ -34,7 +35,22 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return SingleChildScrollView(
+        return  Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme:  InputDecorationTheme(
+                labelStyle: TextStyle(color: colorsUI.primary500),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+              ),
+              textSelectionTheme:  TextSelectionThemeData(
+                cursorColor: colorsUI.primary500,
+              ),
+            ),
+          child: SingleChildScrollView(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 16.0,
@@ -80,7 +96,7 @@ class _HomeViewState extends State<HomeView> {
                   children: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancelar'),
+                      child:  Text('Cancelar', style: TextStyle(color: colorsUI.primary500),)
                     ),
                     const SizedBox(width: 8.0),
                     ElevatedButton(
@@ -110,14 +126,14 @@ class _HomeViewState extends State<HomeView> {
                           _descriptionController.clear();
                         }
                       },
-                      child: Text('Guardar'),
+                      child: Text('Guardar', style: TextStyle(color: colorsUI.primary500),)
                     ),
                   ],
                 ),
               ],
             ),
           ),
-        );
+        ));
       },
     );
   }

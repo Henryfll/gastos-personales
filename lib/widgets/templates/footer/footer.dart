@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/app/utils/colors/colors.dart';
+import 'package:gastos/views/category_view.dart';
 import 'package:gastos/views/home_view.dart';
 import 'package:gastos/views/perfil_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -46,7 +47,10 @@ class _Footer extends State<Footer> {
       //    routes.search(context: context);
           break;
         case 2:
-        //  routes.mainExplore(context: context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const CategoryView()),
+          );
           break;
         case 3:
           Navigator.pushReplacement(
@@ -90,9 +94,9 @@ class _Footer extends State<Footer> {
 
             /// Search
             SalomonBottomBarItem(
-              icon: Icon(PhosphorIcons.chatCircleDots()),
+              icon: Icon(PhosphorIcons.listStar()),
               title: SmP(
-                  title: 'IA',
+                  title: 'Categorias',
                   color: colorsUI.secondary500,
                   align: TextAlign.center,
                   fontWeight: FontWeight.bold),

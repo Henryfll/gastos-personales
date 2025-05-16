@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/app/constants/app_constants.dart';
 import 'package:gastos/models/usuario.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -43,6 +44,7 @@ class LoginViewModel extends ChangeNotifier {
             email: user.email ?? '',
             photoUrl: user.photoURL,
             cuentas: [],
+            categorias:AppConstants.listaInicialCategorias
           );
           await userDoc.set(_usuario!.toMap());
         } else {
