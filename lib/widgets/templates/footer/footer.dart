@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/views/category_view.dart';
+import 'package:gastos/views/goal_view.dart';
 import 'package:gastos/views/home_view.dart';
 import 'package:gastos/views/perfil_view.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -44,7 +45,10 @@ class _Footer extends State<Footer> {
           );
           break;
         case 1:
-      //    routes.search(context: context);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const GoalView()),
+          );
           break;
         case 2:
           Navigator.pushReplacement(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gastos/viewmodels/account_viewmodel.dart';
 import 'package:gastos/viewmodels/category_view_model.dart';
+import 'package:gastos/viewmodels/goal_viewmodel.dart';
 import 'package:gastos/viewmodels/login_viewmodel.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserViewModel()),
         ChangeNotifierProvider(create: (_) => AccountViewModel()),
         ChangeNotifierProvider(create: (_) => CategoryViewModel()),
+        ChangeNotifierProvider(create: (_) => GoalViewModel()),
       ],
       child: ResponsiveApp(
         builder: (context) => ScreenUtilInit(

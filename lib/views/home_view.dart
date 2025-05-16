@@ -146,11 +146,11 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child:  Text('Cancelar', style: TextStyle(color: colorsUI.primary500),)
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar'),
+            child:  Text('Eliminar', style: TextStyle(color: colorsUI.primary500),)
           ),
         ],
       ),
@@ -185,7 +185,22 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return Padding(
+        return Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme:  InputDecorationTheme(
+                labelStyle: TextStyle(color: colorsUI.primary500),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+              ),
+              textSelectionTheme:  TextSelectionThemeData(
+                cursorColor: colorsUI.primary500,
+              ),
+            ),
+            child:Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 16,
@@ -216,7 +231,7 @@ class _HomeViewState extends State<HomeView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+                    TextButton(onPressed: () => Navigator.pop(context), child:  Text('Cancelar', style: TextStyle(color: colorsUI.primary500),)),
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -235,7 +250,7 @@ class _HomeViewState extends State<HomeView> {
                           );
                         }
                       },
-                      child: const Text('Compartir'),
+                      child:  Text('Compartir', style: TextStyle(color: colorsUI.primary500),)
                     ),
                   ],
                 ),
@@ -243,7 +258,7 @@ class _HomeViewState extends State<HomeView> {
               ],
             ),
           ),
-        );
+        ));
       },
     );
   }
