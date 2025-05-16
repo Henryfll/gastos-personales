@@ -5,6 +5,24 @@ import '../models/goal.dart';
 class GoalViewModel extends ChangeNotifier {
   final CollectionReference _goalsCollection = FirebaseFirestore.instance.collection('goals');
 
+  Goal? _goalSelected;
+
+  Goal? get goalSelected => _goalSelected;
+
+  void setGoalSelected(Goal goal) {
+    _goalSelected = goal;
+    notifyListeners();
+  }
+
+  Stream<Goal> getGoalById(String goalId) {
+    return FirebaseFirestore.instance
+        .collection('goals')
+        .doc(goalId)
+        .snapshots()
+        .map((snapshot) => Goal.fromMap(snapshot.id, snapshot.data()!));
+  }
+
+
   Future<void> crearMeta({
     required String nombre,
     required double meta,

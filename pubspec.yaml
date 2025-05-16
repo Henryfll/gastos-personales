@@ -51,6 +51,10 @@ dependencies:
   #Providers
   provider: ^6.1.5
 
+  #graficos
+  fl_chart: ^1.0.0
+  percent_indicator: ^4.2.5
+
 
 dev_dependencies:
   flutter_test:

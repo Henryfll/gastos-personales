@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/app/utils/paths/icons/icons.dart';
+import 'package:gastos/views/deposit_view.dart';
 import 'package:gastos/widgets/molecules/buttons/add_new_button.dart';
 import 'package:gastos/widgets/templates/cards/goal_card.dart';
 import 'package:gastos/widgets/templates/footer/footer.dart';
@@ -182,7 +183,11 @@ class _GoalViewState extends State<GoalView> {
                         onEliminar: () => _confirmDeleteGoal(context, goal.id),
                         onTap: () {
                           print('Tapped on ${ goal.nombre}');
-                          // Agrega aquí la lógica al tocar la categoría
+                          Provider.of<GoalViewModel>(context, listen: false).setGoalSelected(goal);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => DepositView()),
+                          );
                         },
                       );
                     },
