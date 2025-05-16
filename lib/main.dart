@@ -6,6 +6,7 @@ import 'package:gastos/viewmodels/category_view_model.dart';
 import 'package:gastos/viewmodels/deposit_viewmodel.dart';
 import 'package:gastos/viewmodels/goal_viewmodel.dart';
 import 'package:gastos/viewmodels/login_viewmodel.dart';
+import 'package:gastos/viewmodels/movement_viewmodel.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CategoryViewModel()),
         ChangeNotifierProvider(create: (_) => GoalViewModel()),
         ChangeNotifierProvider(create: (_) => DepositViewModel()),
+        ChangeNotifierProvider(create: (_) => MovementViewModel()),
       ],
       child: ResponsiveApp(
         builder: (context) => ScreenUtilInit(

@@ -9,6 +9,21 @@ class AccountViewModel extends ChangeNotifier {
 
   List<Account> get accounts => _accounts;
 
+  Account? accountSelected;
+
+  void setAccountSelected(Account account) {
+    accountSelected = account;
+    notifyListeners();
+  }
+
+
+  Stream<Account> getAccountById(String accountId) {
+    return FirebaseFirestore.instance
+        .collection('accounts')
+        .doc(accountId)
+        .snapshots()
+        .map((snapshot) => Account.fromMap(snapshot.id, snapshot.data()!));
+  }
   Stream<List<Account>> accountsStream(String usuarioId) {
     final userDoc = FirebaseFirestore.instance.collection('users').doc(usuarioId);
 

@@ -3,6 +3,7 @@ import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/models/account.dart';
 import 'package:gastos/viewmodels/account_viewmodel.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
+import 'package:gastos/views/movement_view.dart';
 import 'package:gastos/widgets/molecules/buttons/add_new_button.dart';
 import 'package:gastos/widgets/templates/cards/account_card.dart';
 import 'package:gastos/widgets/templates/footer/footer.dart';
@@ -344,6 +345,14 @@ class _HomeViewState extends State<HomeView> {
                           _nameController.text = cuenta.nombre;
                           _descriptionController.text = cuenta.descripcion;
                           _showAccountModal(context, cuenta: cuenta);
+                        },
+                        onTap: () {
+                          print('Cuenta seleccionada');
+                          Provider.of<AccountViewModel>(context, listen: false).setAccountSelected(cuenta);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => MovementsView()),
+                          );
                         },
                       );
                     },

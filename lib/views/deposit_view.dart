@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/models/goal.dart';
 import 'package:gastos/widgets/molecules/buttons/add_new_button.dart';
 import 'package:gastos/widgets/templates/footer/footer.dart';
@@ -30,7 +31,22 @@ class DepositView extends StatelessWidget {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (_) => Padding(
+        builder: (_) => Theme(
+            data: Theme.of(context).copyWith(
+              inputDecorationTheme:  InputDecorationTheme(
+                labelStyle: TextStyle(color: colorsUI.primary500),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: colorsUI.primary500),
+                ),
+              ),
+              textSelectionTheme:  TextSelectionThemeData(
+                cursorColor: colorsUI.primary500,
+              ),
+            ),
+            child:Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 16, right: 16, top: 16,
@@ -61,7 +77,7 @@ class DepositView extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancelar'),
+                      child:  Text('Cancelar', style: TextStyle(color: colorsUI.primary500),),
                     ),
                     const SizedBox(width: 8),
                     ElevatedButton(
@@ -74,14 +90,14 @@ class DepositView extends StatelessWidget {
                           Navigator.pop(context);
                         }
                       },
-                      child: const Text('Guardar'),
+                      child:  Text('Guardar', style: TextStyle(color: colorsUI.primary500),),
                     ),
                   ],
                 )
               ],
             ),
           ),
-        ),
+        )),
       );
     }
 
@@ -90,7 +106,7 @@ class DepositView extends StatelessWidget {
         title: Text('${goal.nombre}'),
       ),
       body: StreamBuilder<Goal>(
-        stream: goalViewModel.getGoalById(goal.id), // usar goalSelected.id
+        stream: goalViewModel.getGoalById(goal.id),
         builder: (context, goalSnapshot) {
           if (goalSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
