@@ -45,6 +45,14 @@ class MyApp extends StatelessWidget {
           builder: (context, child) => MaterialApp(
             debugShowCheckedModeBanner: false,
             home: const SplashView(),
+            theme: ThemeData(
+              progressIndicatorTheme: const ProgressIndicatorThemeData(
+                color: Colors.orange,
+              ),
+              textSelectionTheme: const TextSelectionThemeData(
+                cursorColor: Colors.black,
+              ),
+            ),
           ),
           child: const SplashView(), // 🔥 Esto es clave
         ),

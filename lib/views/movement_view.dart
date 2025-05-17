@@ -6,6 +6,7 @@ import 'package:gastos/models/account.dart';
 import 'package:gastos/viewmodels/category_view_model.dart';
 import 'package:gastos/viewmodels/open_ai_view_model.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
+import 'package:gastos/views/chat_view.dart';
 import 'package:gastos/widgets/molecules/buttons/add_movement_button.dart';
 import 'package:gastos/widgets/molecules/buttons/add_movement_button_options.dart';
 import 'package:gastos/widgets/molecules/buttons/add_new_button.dart';
@@ -255,7 +256,28 @@ class MovementsView extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('${account.nombre}')),
+      appBar: AppBar(title: Text('${account.nombre}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.chat),
+            tooltip: 'Chat',
+            onPressed: () async{
+
+              final movimientosStream  = context.read<MovementViewModel>().listarMovimientosPorCuenta(account.id);
+              final movimientos = await movimientosStream.first;
+              final openAiVM = context.read<OpenAiViewModel>();
+              await openAiVM.inicializarConsejero(movimientos);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ChatView(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           StreamBuilder<List<Movement>>(

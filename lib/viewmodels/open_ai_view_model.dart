@@ -1,61 +1,68 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:gastos/app/constants/app_constants.dart';
+import 'package:gastos/models/movement.dart';
+import 'package:gastos/services/open_ai_service.dart';
 import 'package:http/http.dart' as http;
 
 class OpenAiViewModel extends ChangeNotifier {
-  final String apiKey = 'APIKEY';
 
   String? resultado;
   bool isLoading = false;
+  final TextEditingController chatController = TextEditingController();
+  final List<Map<String, String>> chatMessages = [];
+
+  bool cargando = false;
 
   Future<void> procesarFactura(File imagen) async {
     isLoading = true;
     resultado = null;
     notifyListeners();
 
+    resultado = await OpenAiService.procesarImagenFactura(imagen);
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+
+  Future<void> inicializarConsejero(List<Movement> movimientos) async {
+    final resumen = movimientos.map((m) =>
+    '${m.tipo == AppConstants.INGRESO ? '+' : '-'} ${m.valor} en ${m.categoria} el ${m.fecha.toLocal()}').join('\n');
+
+    chatMessages.clear();
+    chatMessages.add({
+      'role': 'system',
+      "content": "Actúa como un asesor financiero personal. Basado en los siguientes movimientos financieros, responde preguntas del usuario.\n\n$resumen"
+    });
+    chatMessages.add({
+      "role": "assistant",
+      "content": "Hola soy ${AppConstants.chatBotName} tu asistente financiero, ¿cómo te puedo ayudar hoy?" });
+
+    notifyListeners();
+  }
+
+  Future<void> enviarPregunta() async {
+    final pregunta = chatController.text.trim();
+    if (pregunta.isEmpty) return;
+
+    chatMessages.add({'role': 'user', 'content': pregunta});
+    chatController.clear();
+    notifyListeners();
+
+    cargando = true;
+    notifyListeners();
+
     try {
-      final bytes = await imagen.readAsBytes();
-      final base64Image = base64Encode(bytes);
-
-      final response = await http.post(
-        Uri.parse('https://api.openai.com/v1/chat/completions'),
-        headers: {
-          'Authorization': 'Bearer $apiKey',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          "model": "gpt-4o",
-          "messages": [
-            {
-              "role": "user",
-              "content": [
-                {"type": "text", "text": "Extrae el total de la factura en la , solo el valor numérico sin la moneda."},
-                {
-                  "type": "image_url",
-                  "image_url": {
-                    "url": "data:image/jpeg;base64,$base64Image"
-                  }
-                }
-              ]
-            }
-          ],
-          "max_tokens": 100,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        resultado = data["choices"][0]["message"]["content"];
-      } else {
-        resultado = 'Error al procesar: ${response.statusCode}';
-      }
+      final response = await OpenAiService.enviarChat(chatMessages);
+      chatMessages.add({'role': 'assistant', 'content': response});
     } catch (e) {
-      resultado = 'Error: $e';
-    } finally{
-      isLoading = false;
+      chatMessages.add({'role': 'assistant', 'content': 'Ocurrió un error: $e'});
+    } finally {
+      cargando = false;
       notifyListeners();
     }
-
   }
 }
