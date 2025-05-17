@@ -5,10 +5,11 @@ import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/widgets/atoms/dashed_border_painter.dart';
 
 class AddMovementButton extends StatelessWidget {
-  const AddMovementButton ({super.key, required this.onPressed, required this.texto, required this.tipo});
+  const AddMovementButton ({super.key, required this.onPressed, required this.texto, required this.valor,required this.tipo});
 
   final VoidCallback onPressed;
   final String texto;
+  final String valor;
   final String tipo;
 
   @override
@@ -29,10 +30,16 @@ class AddMovementButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                texto,
-                style: TextStyle(color: tipo==AppConstants.INGRESO? Colors.green:Colors.red),
-              ),
+              Column(children: [
+                Text(
+                  texto,
+                  style: TextStyle(color: tipo==AppConstants.INGRESO? Colors.green:Colors.red),
+                ),
+                Text(
+                  valor,
+                  style: TextStyle(color: tipo==AppConstants.INGRESO? Colors.green:Colors.red),
+                ),
+              ],),
               const SizedBox(width: 8.0),
                Icon(
                 tipo==AppConstants.INGRESO? Icons.add:Icons.remove_sharp,

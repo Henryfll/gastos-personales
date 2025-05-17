@@ -53,7 +53,7 @@ class MovementsView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Categoría con Dropdown desde stream
+
                 tipo==AppConstants.EGRESO ? StreamBuilder<List<String>>(
                   stream: categoryViewModel.categoriesStream(usuario!.uid),
                   builder: (context, snapshot) {
@@ -86,7 +86,7 @@ class MovementsView extends StatelessWidget {
                 ):
                 const SizedBox(height: 16),
                 const SizedBox(height: 16),
-                // Descripción
+
                 TextFormField(
                   controller: _descripcionController,
                   decoration: const InputDecoration(
@@ -96,7 +96,7 @@ class MovementsView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Valor
+
                 TextFormField(
                   controller: _valorController,
                   decoration: const InputDecoration(
@@ -112,7 +112,7 @@ class MovementsView extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Selector de fecha
+
                 TextFormField(
                   readOnly: true,
                   decoration: InputDecoration(
@@ -180,41 +180,68 @@ class MovementsView extends StatelessWidget {
       final imageFile = File(pickedFile.path);
 
       final openAiVM = Provider.of<OpenAiViewModel>(context, listen: false);
-      await openAiVM.procesarFactura(imageFile);
+      final movementViewModel = Provider.of<MovementViewModel>(context, listen: false);
+      final usuario = Provider.of<UserViewModel>(context, listen: false).usuario;
+      final cuentaId = Provider.of<AccountViewModel>(context, listen: false).accountSelected?.id;
 
-      // Mostrar el resultado si quieres
-      final resultado = openAiVM.resultado;
-      if (context.mounted && resultado != null) {
 
-        final movementViewModel = Provider.of<MovementViewModel>(context, listen: false);
-        final usuario = Provider.of<UserViewModel>(context, listen: false).usuario;
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+
+      try {
+        await openAiVM.procesarFactura(imageFile);
+        final resultado = openAiVM.resultado;
+
+        if (context.mounted && resultado != null && cuentaId != null && usuario != null) {
           await movementViewModel.crearMovimiento(
             tipo: AppConstants.EGRESO,
             categoria: AppConstants.FACTURA,
             descripcion: AppConstants.FACTURA,
             valor: double.parse(resultado),
             fecha: DateTime.now(),
-            cuentaId: context.read<AccountViewModel>().accountSelected!.id,
-            usuarioCreacion: usuario!.uid,
+            cuentaId: cuentaId,
+            usuarioCreacion: usuario.uid,
           );
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Egreso Registrado!'),
-            content: Text(resultado),
-            actions: [
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
+
+          if (context.mounted) {
+            Navigator.of(context).pop();
+
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Egreso registrado: \$ ${(double.parse(resultado) ?? 0).toStringAsFixed(2)}'),
+                duration: const Duration(seconds: 3),
+                backgroundColor: Colors.green,
               ),
-            ],
-          ),
-        );
+            );
+          }
+        } else {
+          if (context.mounted) Navigator.of(context).pop();
+        }
+      } catch (e) {
+        if (context.mounted) {
+          Navigator.of(context).pop();
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error al procesar la imagen: $e'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
       }
     } else {
       print('No se tomó ninguna foto.');
     }
   }
+
+
 
 
   @override
@@ -254,23 +281,26 @@ class MovementsView extends StatelessWidget {
               return  Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AddMovementButton(
                       onPressed: () => _mostrarFormulario(context, AppConstants.INGRESO),
-                      texto: "Ingresos ${ingresos}",
+                      texto: "Ingresos ",
+                      valor: "${(ingresos ?? 0).toStringAsFixed(2)}",
                       tipo: AppConstants.INGRESO,
                     ),
-                    const SizedBox(width: 5),
+                    const SizedBox(width: 15),
                     Consumer<OpenAiViewModel>(builder: (context, openAiVM, child){
                       if (openAiVM.isLoading) {
                         return const Center(child: CircularProgressIndicator());
                       }
                       return AddMovementButtonOptions(
                         onPressed: () {
-                          // accion
+                          //TODO
                         },
                         onRegister:  () => _mostrarFormulario(context, AppConstants.EGRESO),
-                        texto: "Egresos ${(egresos ?? 0).toStringAsFixed(2)}",
+                        texto: "Egresos ",
+                        valor: "${(egresos ?? 0).toStringAsFixed(2)}",
                         tipo: AppConstants.EGRESO,
                         onAutomatic: (){
                           _abrirCamara(context);
@@ -297,7 +327,7 @@ class MovementsView extends StatelessWidget {
               final updatedAccount = accountSnapshot.data!;
 
               return  Text(
-                'Saldo: \$${updatedAccount.saldo}',
+                'Saldo: \$${(updatedAccount.saldo ?? 0).toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ) ;
             },

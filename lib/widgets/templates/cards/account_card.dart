@@ -9,7 +9,7 @@ class AccountCard extends StatelessWidget {
   final VoidCallback? onEliminar;
   final VoidCallback? onCompartir;
   final VoidCallback? onEditar;
-  final VoidCallback? onTap; // <-- Nueva propiedad
+  final VoidCallback? onTap;
 
   const AccountCard({
     super.key,
@@ -20,13 +20,13 @@ class AccountCard extends StatelessWidget {
     this.onEliminar,
     this.onCompartir,
     this.onEditar,
-    this.onTap, // <-- Agregada aquí también
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // <-- Aquí se ejecuta
+      onTap: onTap,
       child: Container(
         width: 300.sp,
         padding: const EdgeInsets.all(16.0),

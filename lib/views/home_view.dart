@@ -308,7 +308,7 @@ class _HomeViewState extends State<HomeView> {
 
             SizedBox(height: 16),
 
-            // Lista reactiva de cuentas
+            
             Expanded(
               child: StreamBuilder<List<Account>>(
                 stream: accountViewModel.accountsStream(usuario.uid),

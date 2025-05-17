@@ -29,10 +29,10 @@ class DepositViewModel extends ChangeNotifier {
 
       final currentSaldo = (goalSnapshot.data() as Map<String, dynamic>)['saldo']?.toDouble() ?? 0.0;
 
-      // Agregar el depósito
+
       transaction.set(newDepositRef, deposito.toMap());
 
-      // Actualizar el saldo de la meta
+
       transaction.update(goalRef, {
         'saldo': currentSaldo + valor,
       });

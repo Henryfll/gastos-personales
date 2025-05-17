@@ -24,7 +24,7 @@ class DashedBorderPainter extends CustomPainter {
     double startX = 0;
     double startY = 0;
 
-    // Dibujar borde superior
+
     while (startX < size.width) {
       canvas.drawLine(
         Offset(startX, startY),
@@ -34,7 +34,7 @@ class DashedBorderPainter extends CustomPainter {
       startX += dashLength + dashSpace;
     }
 
-    // Dibujar borde derecho
+
     double currentY = 0;
     while (currentY < size.height) {
       double endY = currentY + dashLength;
@@ -49,7 +49,7 @@ class DashedBorderPainter extends CustomPainter {
       currentY += dashLength + dashSpace;
     }
 
-    // Dibujar borde inferior
+
     startX = 0;
     startY = size.height;
     while (startX < size.width) {
@@ -61,7 +61,7 @@ class DashedBorderPainter extends CustomPainter {
       startX += dashLength + dashSpace;
     }
 
-    // Dibujar borde izquierdo
+
     currentY = 0;
     while (currentY < size.height) {
       double endY = currentY + dashLength;

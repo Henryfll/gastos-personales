@@ -50,7 +50,7 @@ class MovementsBarChart extends StatelessWidget {
                   showTitles: true,
                   getTitlesWidget: (value, meta) {
                     return Transform.rotate(
-                      angle: 0, // 👈 Horizontal (0 radianes)
+                      angle: 0,
                       child: Text(
                         value.toInt().toString(),
                         style: const TextStyle(fontSize: 10),

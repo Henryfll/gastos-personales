@@ -9,25 +9,34 @@ class AddMovementButtonOptions extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.texto,
+    required this.valor,
     required this.tipo,
     this.onRegister,
     this.onAutomatic,
   });
 
-  final VoidCallback onPressed; // Callback original del botón
+  final VoidCallback onPressed;
   final String texto;
+  final String valor;
   final String tipo;
-  final VoidCallback? onRegister; // Nuevo callback para "Registrar"
-  final VoidCallback? onAutomatic; // Nuevo callback para "Automático"
+  final VoidCallback? onRegister;
+  final VoidCallback? onAutomatic;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Mostrar el menú emergente al hacer tap en el botón
+
+        final RenderBox button = context.findRenderObject() as RenderBox;
+        final Offset buttonPosition = button.localToGlobal(Offset.zero);
+        final Size buttonSize = button.size;
         final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+
         final RelativeRect position = RelativeRect.fromRect(
-          context.findRenderObject()!.paintBounds.inflate(5.0),
+          Rect.fromPoints(
+            buttonPosition.translate(buttonSize.width, 0),
+            buttonPosition.translate(buttonSize.width, 0),
+          ).inflate(5.0),
           overlay.localToGlobal(Offset.zero) & overlay.size,
         );
 
@@ -39,9 +48,9 @@ class AddMovementButtonOptions extends StatelessWidget {
               value: 'registrar',
               child: Row(
                 children: [
-                  const Icon(Icons.edit), // Icono de edición (puedes cambiarlo)
+                  const Icon(Icons.edit),
                   SizedBox(width: 8.w),
-                  const Text('Registro Manual'),
+                  const Text('Registrar'),
                 ],
               ),
             ),
@@ -49,15 +58,15 @@ class AddMovementButtonOptions extends StatelessWidget {
               value: 'automatico',
               child: Row(
                 children: [
-                  const Icon(Icons.camera_alt), // Icono de cámara (puedes cambiarlo)
+                  const Icon(Icons.camera_alt),
                   SizedBox(width: 8.w),
-                  const Text('Registro Automático'),
+                  const Text('Escanear Factura'),
                 ],
               ),
             ),
           ],
         ).then((String? selected) {
-          // Manejar la opción seleccionada
+
           switch (selected) {
             case 'registrar':
               onRegister?.call();
@@ -65,7 +74,7 @@ class AddMovementButtonOptions extends StatelessWidget {
             case 'automatico':
               onAutomatic?.call();
               break;
-          // Si aún necesitas el onPressed original para otra acción por defecto:
+
             default:
               if (selected != null) {
                 onPressed?.call();
@@ -87,10 +96,18 @@ class AddMovementButtonOptions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                texto,
-                style: TextStyle(color: tipo == AppConstants.INGRESO ? Colors.green : Colors.red),
-              ),
+             Column(
+               children: [
+                 Text(
+                   texto,
+                   style: TextStyle(color: tipo == AppConstants.INGRESO ? Colors.green : Colors.red),
+                 ),
+                 Text(
+                   valor,
+                   style: TextStyle(color: tipo == AppConstants.INGRESO ? Colors.green : Colors.red),
+                 ),
+               ],
+             ),
               const SizedBox(width: 8.0),
               Icon(
                 tipo == AppConstants.INGRESO ? Icons.add : Icons.remove_sharp,

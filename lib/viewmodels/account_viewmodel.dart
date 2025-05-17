@@ -62,7 +62,7 @@ class AccountViewModel extends ChangeNotifier {
 
     await newDoc.set(account.toMap());
 
-    // Actualiza la lista de cuentas del usuario en la colección "users"
+
     final userDoc = FirebaseFirestore.instance.collection('users').doc(usuarioId);
     final userSnapshot = await userDoc.get();
 

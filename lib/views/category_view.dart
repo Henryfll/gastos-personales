@@ -162,10 +162,10 @@ class CategoryView extends StatelessWidget {
                       itemBuilder: (context,index){
                         return CategoryCard(
                           name: categorias[index],
-                          imagePath: iconsUI.emptyCart, // Asumiendo que iconPaths tiene las rutas en el mismo orden
+                          imagePath: iconsUI.emptyCart,
                           onTap: () {
                             print('Tapped on ${categorias[index]}');
-                            // Agrega aquí la lógica al tocar la categoría
+
                           },
                         );
                       }

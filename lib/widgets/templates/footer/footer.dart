@@ -74,7 +74,7 @@ class _Footer extends State<Footer> {
             navigator(i);
           },
           items: [
-            /// Home
+
             SalomonBottomBarItem(
               icon: const Icon(Icons.home),
               title: SmP(
@@ -85,7 +85,7 @@ class _Footer extends State<Footer> {
               selectedColor: colorsUI.secondary500,
             ),
 
-            /// Search
+
             SalomonBottomBarItem(
               icon: const Icon(Icons.flag_outlined),
               title: SmP(
@@ -96,7 +96,7 @@ class _Footer extends State<Footer> {
               selectedColor: colorsUI.secondary500,
             ),
 
-            /// Search
+
             SalomonBottomBarItem(
               icon: Icon(PhosphorIcons.listStar()),
               title: SmP(
@@ -106,7 +106,7 @@ class _Footer extends State<Footer> {
                   fontWeight: FontWeight.bold),
               selectedColor: colorsUI.secondary500,
             ),
-            /// Create Perfume
+
             SalomonBottomBarItem(
               icon: const Icon(Icons.person_outline),
               title: SmP(

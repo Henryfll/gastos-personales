@@ -13,8 +13,8 @@ class TopBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       decoration: BoxDecoration(
-        color: Colors.white, // Asumiendo un fondo blanco
-        borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10.0),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
