@@ -6,6 +6,7 @@ class IconsUI {
   final String emptyCart = 'assets/icons/png/empty_cart.png';
   final String payment = 'assets/icons/png/payment.png';
   final String paypal = 'assets/icons/png/paypal.png';
+  final String money = 'assets/login/money.json';
 }
 
 IconsUI iconsUI = IconsUI();

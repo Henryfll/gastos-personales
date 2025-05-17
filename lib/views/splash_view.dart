@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/viewmodels/user_viewmodel.dart';
 import 'package:gastos/views/home_view.dart';
 import 'package:gastos/views/login_view.dart';
@@ -54,6 +55,7 @@ class _SplashViewState extends State<SplashView> {
           style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
         ),
       ),
+      backgroundColor: colorsUI.secondary500,
     );
   }
 }

@@ -59,6 +59,9 @@ dependencies:
   #camara
   image_picker: ^1.1.2
 
+  #animations
+  lottie: ^3.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +83,8 @@ flutter:
 
   assets:
     - assets/icons/png/
+    - assets/login/money.json
+
   fonts:
     - family: Gotham
       fonts:

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gastos/app/utils/colors/colors.dart';
 import 'package:gastos/app/utils/paths/icons/icons.dart';
 import 'package:gastos/views/home_view.dart';
 import 'package:gastos/widgets/molecules/buttons/custom_icon_text_button_mobile.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import '../app/constants/app_constants.dart';
 import '../viewmodels/login_viewmodel.dart';
@@ -38,7 +40,12 @@ class LoginView extends StatelessWidget {
               AppConstants.appName,
               style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 80.sp),
+            SizedBox(
+              height: 250,
+              child: Lottie.asset(iconsUI.money),
+            ),
+
+            SizedBox(height: 10.sp),
             GestureDetector(
               onTap: () => _handleLogin(context),
               child: CustomIconTextButtonMobile(
@@ -53,6 +60,7 @@ class LoginView extends StatelessWidget {
           ],
         ),
       ),
+      backgroundColor: colorsUI.secondary500,
     );
   }
 }
